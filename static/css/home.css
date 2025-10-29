@@ -134,3 +134,18 @@
   transform: scale(1.05);
   opacity: 0.9;
 }
+.navbar a.nav-link:hover {
+  text-decoration: underline;
+}
+
+.dropdown-menu {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.btn-light {
+  background: white;
+  color: #6a11cb;
+  font-weight: 600;
+}

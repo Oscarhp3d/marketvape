@@ -28,9 +28,7 @@ INSTALLED_APPS = [
 
     # Apps locales
     'productos',
-    'usuarios',
-    'carrito',
-]
+    ]
 
 
 # MIDDLEWARE

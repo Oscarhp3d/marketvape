@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.contrib.auth import login
 from .forms import RegistroForm
 
-def register_view(request):
+def registro(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Tu cuenta fue creada con éxito 🎉')
-            return redirect('productos:home')
+            usuario = form.save(commit=False)
+            # ✅ cifra correctamente la contraseña
+            usuario.set_password(form.cleaned_data['password1'])
+            usuario.save()
+            login(request, usuario)
+            return redirect('login')
     else:
         form = RegistroForm()
-    return render(request, 'registro.html', {'form': form})
+    return render(request, 'usuarios/registro.html', {'form': form})

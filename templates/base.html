@@ -18,28 +18,71 @@
 <body>
 
   <!-- NAVBAR SUPERIOR -->
-  <nav class="navbar navbar-expand-lg py-3" style="background-color: #8b00ff;">
-    <div class="container">
-      <!-- LOGO -->
-      <a class="navbar-brand fw-bold text-black" href="{% url 'productos:home' %}">VapeMarket</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+ <!-- NAVBAR SUPERIOR -->
+<nav class="navbar navbar-expand-lg py-3" style="background-color: #8b00ff;">
+  <div class="container">
+    <!-- LOGO -->
+    <a class="navbar-brand fw-bold text-white" href="{% url 'productos:home' %}">
+      VapeMarket
+    </a>
 
-      <!-- ENLACES -->
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
+    <!-- BOTÓN RESPONSIVE -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- ENLACES -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link text-white fw-semibold" href="{% url 'productos:home' %}">Inicio</a>
+        </li>
+
+        {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link text-black" href="{% url 'productos:home' %}">Inicio</a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="nav-link text-white fw-semibold border-0 bg-transparent">
+                Cerrar sesión
+              </button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link text-white fw-semibold" href="{% url 'login' %}">Iniciar sesión</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-black" href="#">Ver Tienda</a>
+            <a class="nav-link text-white fw-semibold" href="{% url 'registro' %}">Registrarse</a>
           </li>
-        
-        </ul>
+        {% endif %}
+      </ul>
+
+      <!-- DERECHA -->
+      <div class="d-flex align-items-center">
+        <!-- Campo de búsqueda -->
+        <form action="{% url 'productos:buscar_productos' %}" method="get" class="d-flex me-3">
+          <input class="form-control form-control-sm" type="search" placeholder="Buscar..." name="q">
+          <button class="btn btn-light btn-sm ms-1" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+
+        <!-- Menú desplegable Explorar -->
+        <div class="dropdown">
+          <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="explorarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i> Explorar productos
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="explorarDropdown">
+            <li><a class="dropdown-item" href="#">Vapers</a></li>
+            <li><a class="dropdown-item" href="#">Líquidos</a></li>
+            <li><a class="dropdown-item" href="#">Pods</a></li>
+          </ul>
+        </div>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
+
 
   <!-- CONTENIDO PRINCIPAL -->
   {% block content %}{% endblock %}
