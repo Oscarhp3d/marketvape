@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inicio - VapeMarket{% endblock %}
+
+{% block content %}
+
+<!--  HERO CON IMAGEN DE FONDO -->
+<section class="hero d-flex align-items-center text-center position-relative"
+         style="background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20230720/pngtree-three-dimensional-vape-symbol-image_3712416.jpg');
+                background-size: cover;
+                background-position: center;
+                height: 80vh;
+                color: white;">
+  <!-- Capa de color semitransparente -->
+  <div class="overlay position-absolute top-0 start-0 w-100 h-100"
+       style="background: rgba(82, 0, 255, 0.55); z-index: 1;"></div>
+
+  <div class="container hero-content position-relative" style="z-index: 2;">
+    <h1 class="display-4 fw-bold">Descubre el Futuro del Vapeo</h1>
+    <p class="lead mb-4 text-white-50">
+      Explora una selección exclusiva de dispositivos y líquidos premium.
+    </p>
+    <a href="#" class="btn btn-vape btn-lg px-4 py-2" 
+       style="background: #8b5cf6; color: white; border: none; border-radius: 30px;">
+       Explorar Productos
+    </a>
+  </div>
+</section>
+
+
+<!-- 🧴 PRODUCTOS DESTACADOS -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <h2 class="section-title mb-4 text-center fw-bold">Vapes Destacados</h2>
+
+    <div class="row justify-content-center g-4">
+
+      <!-- Producto 1 -->
+      <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm text-center">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZPkSZq6HOw0wM2CsWEuqQIWdawcMwEe3inQ&s"
+               class="img-fluid"
+               style="height:200px; object-fit:cover; border-radius:10px;" alt="Vuse Go">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold">Kendracapsula</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 2 -->
+      <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm text-center">
+          <img src="https://licoresjunior.com/wp-content/uploads/2023/12/vaper-desechable-vuse-go-banana-ice-3000-puffvaper-desechable-vuse-go-banana-ice-3000-puffvuselicores-medellin-860732-1.webp"
+               class="img-fluid"
+               style="height:200px; object-fit:cover; border-radius:10px;" alt="Xplay">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold">Mariana</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 3 -->
+      <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm text-center">
+          <img src="https://www.iplayvape.com/uploads/IPLAY-WALKER-DISPOSABLE-VAPE-1.jpg"
+               class="img-fluid"
+               style="height:200px; object-fit:cover; border-radius:10px;" alt="Kesmick">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold">jhonhumo</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 4 -->
+      <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm text-center">
+          <img src="https://www.vapestylecr.com/cdn/shop/files/7424652200237.jpg?v=1722384395&width=533"
+               class="img-fluid"
+               style="height:200px; object-fit:cover; border-radius:10px;" alt="Disposable">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold">oscaresencia</h5>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ⭐ POR QUÉ ELEGIR -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="section-title text-center fw-bold">¿Por qué Elegir VapeMarket?</h2>
+    <div class="row text-center mt-4">
+      <div class="col-md-4 mb-4">
+        <div class="icon-circle mb-3">
+          <i class="bi bi-star-fill fs-1 text-primary"></i>
+        </div>
+        <h5>Calidad Premium</h5>
+        <p class="text-muted">Productos 100% originales y garantizados.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="icon-circle mb-3">
+          <i class="bi bi-truck fs-1 text-primary"></i>
+        </div>
+        <h5>Entrega Rápida</h5>
+        <p class="text-muted">Recibe tu pedido en tiempo récord.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="icon-circle mb-3">
+          <i class="bi bi-shield-check fs-1 text-primary"></i>
+        </div>
+        <h5>Soporte Excepcional</h5>
+        <p class="text-muted">Atención personalizada 24/7.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ⚙️ ASÍ FUNCIONA -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <h2 class="section-title text-center fw-bold">Así Funciona</h2>
+    <div class="row text-center mt-4">
+      <div class="col-md-3 col-6 mb-4">
+        <i class="bi bi-search fs-1 text-primary"></i>
+        <h6 class="fw-semibold mt-2">Explora Nuestro Catálogo</h6>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <i class="bi bi-cart fs-1 text-primary"></i>
+        <h6 class="fw-semibold mt-2">Añade al Carrito</h6>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <i class="bi bi-box-seam fs-1 text-primary"></i>
+        <h6 class="fw-semibold mt-2">Recibe en Casa</h6>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <i class="bi bi-emoji-smile fs-1 text-primary"></i>
+        <h6 class="fw-semibold mt-2">Disfruta tu Vapeo</h6>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
