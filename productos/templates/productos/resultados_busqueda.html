@@ -3,13 +3,13 @@
 
 {% block content %}
 <div class="container py-5">
-  <h3>Resultados para "{{ query }}"</h3>
+  <h3>Resultados de explorar productos</h3>
   <div class="row mt-4">
     {% if productos %}
       {% for producto in productos %}
         <div class="col-md-3 mb-4">
           <div class="card h-100 shadow-sm">
-            <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+            <img src="{{ producto.imagen }}" class="card-img-top" alt="{{ producto.nombre }}">
             <div class="card-body">
               <h5 class="card-title">{{ producto.nombre }}</h5>
               <p class="card-text text-muted">${{ producto.precio }}</p>
