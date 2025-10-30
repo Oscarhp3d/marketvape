@@ -1,9 +1,271 @@
-{% extends 'base.html' %}
-{% block content %}
-<h2>Registrarse</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-success">Crear cuenta</button>
-</form>
-{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registrarse - VapeMarket</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    background: radial-gradient(circle at top, #1b1b2f, #16213e);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    color: white;
+    overflow-y: auto;
+  }
+
+  .background-smoke-blue {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 70% 30%, rgba(102,0,255,0.15), transparent 70%);
+    filter: blur(60px);
+    animation: floatSmokeBlue 10s infinite alternate ease-in-out;
+    z-index: 0;
+  }
+
+  @keyframes floatSmokeBlue {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-30px, -20px); }
+  }
+
+  .register-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .register-box {
+    background: rgba(255,255,255,0.08);
+    padding: 2.5rem 3rem;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(255,255,255,0.1);
+    text-align: center;
+    color: white;
+    width: 95%;
+    max-width: 450px;
+  }
+
+  .register-box h2 {
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  label {
+    display: block;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-top: 10px;
+  }
+
+  input {
+    width: 100%;
+    margin: 8px 0 16px 0;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 1rem;
+  }
+
+  input::placeholder {
+    color: rgba(255,255,255,0.6);
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Tooltip con los requerimientos */
+  .password-tooltip {
+    display: none;
+    position: absolute;
+    top: -160%;
+    left: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.8);
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    color: #ddd;
+    text-align: left;
+    box-shadow: 0 0 10px rgba(100,100,255,0.4);
+    animation: fadeIn 0.3s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .password-tooltip ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .password-tooltip ul li {
+    margin-bottom: 4px;
+  }
+
+  /* 🚬 Cigarrillo azul */
+  .cigarette-blue {
+    position: relative;
+    width: 180px;
+    height: 20px;
+    background: linear-gradient(to right, #dcdcdc 0%, #bfbfbf 80%, #004aad 100%);
+    border-radius: 10px;
+    margin: 1.5rem auto 0;
+    overflow: hidden;
+  }
+
+  .ash-blue {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0%;
+    height: 100%;
+    background: #222;
+    transition: width 3s linear;
+  }
+
+  .smoke-blue {
+    position: absolute;
+    right: -10px;
+    top: -20px;
+    width: 10px;
+    height: 10px;
+    background: rgba(150,150,255,0.4);
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  @keyframes smokeUpBlue {
+    0% { transform: translateY(0) scale(1); opacity: 0.5; }
+    50% { transform: translateY(-30px) scale(1.3); opacity: 0.3; }
+    100% { transform: translateY(-60px) scale(0.8); opacity: 0; }
+  }
+
+  .back-home {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    color: #8ab4f8;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+
+  .back-home:hover {
+    text-shadow: 0 0 10px #6a11cb;
+  }
+</style>
+</head>
+<body>
+  <div class="background-smoke-blue"></div>
+
+  <div class="register-wrapper">
+    <div class="register-box">
+      <h2>Crear Cuenta</h2>
+      <form method="post" id="registerForm">
+        {% csrf_token %}
+        
+        <label for="id_username">Nombre de usuario:</label>
+        <input type="text" name="username" id="id_username" placeholder="Tu nombre de usuario" required>
+        
+        <label for="id_email">Correo electrónico:</label>
+        <input type="email" name="email" id="id_email" placeholder="ejemplo@correo.com" required>
+        
+        <label for="id_telefono">Teléfono:</label>
+        <input type="text" name="telefono" id="id_telefono" placeholder="Número de contacto" required>
+        
+        <label for="id_direccion">Dirección:</label>
+        <input type="text" name="direccion" id="id_direccion" placeholder="Tu dirección" required>
+
+        <label for="id_password1">Contraseña:</label>
+        <div style="position: relative;">
+          <input type="password" name="password1" id="id_password1" placeholder="Crea una contraseña" required>
+          <div class="password-tooltip" id="passwordTooltip">
+            <ul>
+              <li>Debe tener al menos 8 caracteres.</li>
+              <li>No debe ser similar a tu información personal.</li>
+              <li>No puede ser una contraseña común.</li>
+              <li>No puede ser solo números.</li>
+            </ul>
+          </div>
+        </div>
+
+        <label for="id_password2">Confirmar contraseña:</label>
+        <input type="password" name="password2" id="id_password2" placeholder="Repite la contraseña" required>
+
+        <button type="submit" id="registerBtn">Crear cuenta</button>
+      </form>
+    </div>
+  </div>
+
+  <a href="/" class="back-home">← Volver al inicio</a>
+
+  <script>
+  const form = document.getElementById('registerForm');
+  const btn = document.getElementById('registerBtn');
+  const pass = document.getElementById('id_password1');
+  const tooltip = document.getElementById('passwordTooltip');
+
+  pass.addEventListener('focus', () => tooltip.style.display = 'block');
+  pass.addEventListener('blur', () => tooltip.style.display = 'none');
+
+  form.addEventListener('submit', e => {
+    // ⚠️ No hacemos e.preventDefault()
+    // Dejamos que el formulario se envíe naturalmente
+    e.preventDefault(); // pero sí evitamos envío inmediato
+
+    btn.outerHTML = `
+      <div class="cigarette-blue" id="cigaretteBlue">
+        <div class="ash-blue" id="ashBlue"></div>
+      </div>
+    `;
+
+    const cig = document.getElementById('cigaretteBlue');
+    const ash = document.getElementById('ashBlue');
+
+    setTimeout(() => { ash.style.width = '100%'; }, 200);
+
+    const smokeInterval = setInterval(() => {
+      const smoke = document.createElement('div');
+      smoke.classList.add('smoke-blue');
+      cig.appendChild(smoke);
+      smoke.style.right = (Math.random() * 30 - 10) + 'px';
+      smoke.style.animation = 'smokeUpBlue 2s ease-out forwards';
+      setTimeout(() => smoke.remove(), 2000);
+    }, 300);
+
+    // 🔥 En lugar de form.submit(), disparamos el envío normal
+    setTimeout(() => {
+      clearInterval(smokeInterval);
+      e.target.submit();  // ✅ Esto envía con CSRF y redirección
+    }, 3200);
+  });
+</script>
+</body>
+</html>

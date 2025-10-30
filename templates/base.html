@@ -39,20 +39,29 @@
         </li>
 
         {% if user.is_authenticated %}
+          <!-- 🔹 Enlace al perfil -->
           <li class="nav-item">
-            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            <a class="nav-link text-white fw-semibold" href="{% url 'usuarios:perfil_usuario' %}">
+              Mi perfil
+            </a>
+          </li>
+
+          <!-- 🔹 Botón de cerrar sesión -->
+          <li class="nav-item">
+            <form action="{% url 'usuarios:logout' %}" method="post" style="display:inline;">
               {% csrf_token %}
               <button type="submit" class="nav-link text-white fw-semibold border-0 bg-transparent">
                 Cerrar sesión
               </button>
             </form>
           </li>
+
         {% else %}
           <li class="nav-item">
-            <a class="nav-link text-white fw-semibold" href="{% url 'login' %}">Iniciar sesión</a>
+            <a class="nav-link text-white fw-semibold" href="{% url 'usuarios:login' %}">Iniciar sesión</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white fw-semibold" href="{% url 'registro' %}">Registrarse</a>
+            <a class="nav-link text-white fw-semibold" href="{% url 'usuarios:registro' %}">Registrarse</a>
           </li>
         {% endif %}
       </ul>

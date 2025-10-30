@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Perfil de Usuario - VapeMarket{% endblock %}
+
+{% block content %}
+<section class="perfil-section py-5 bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <!-- Tarjeta principal -->
+        <div class="card shadow-lg border-0" style="border-radius: 20px; overflow: hidden;">
+          <div class="card-header text-center text-white" style="background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);">
+            <h3 class="fw-bold mb-0"> Mi Perfil</h3>
+          </div>
+
+          <div class="card-body text-center py-4">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                 alt="Avatar" class="rounded-circle mb-3" width="100" height="100">
+
+            <h5 class="fw-bold text-dark mb-1">{{ usuario.first_name }} {{ usuario.last_name }}</h5>
+            <p class="text-muted mb-3">{{ usuario.email }}</p>
+
+            <div class="text-start px-4">
+              <p><strong>📞 Teléfono:</strong> {{ usuario.telefono|default:"No registrado" }}</p>
+              <p><strong>🏠 Dirección:</strong> {{ usuario.direccion|default:"No registrada" }}</p>
+              <p><strong>👤 Usuario:</strong> {{ usuario.username }}</p>
+            </div>
+
+            <button class="btn btn-vape mt-3" data-bs-toggle="modal" data-bs-target="#editarPerfilModal" style="background-color: #6c757d; color: #ffffff;">
+              Editar Perfil
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 🧩 MODAL DE EDICIÓN -->
+<div class="modal fade" id="editarPerfilModal" tabindex="-1" aria-labelledby="editarPerfilLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 20px;">
+      <div class="modal-header text-white" style="background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);">
+        <h5 class="modal-title" id="editarPerfilLabel">Editar Perfil</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <form method="POST" action="{% url 'usuarios:editar_perfil' %}">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ usuario.first_name }}">
+          </div>
+          <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" class="form-control" id="apellido" name="apellido" value="{{ usuario.last_name }}">
+          </div>
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="telefono" name="telefono" value="{{ usuario.telefono }}">
+          </div>
+          <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="direccion" name="direccion" value="{{ usuario.direccion }}">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-vape" style="background-color: #6c757d; color: #ffffff;">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if messages %}
+  <script>
+    // Mostrar alerta bonita al guardar perfil
+    document.addEventListener("DOMContentLoaded", () => {
+      {% for message in messages %}
+        Swal.fire({
+          title: " {{ message }}",
+          icon: "success",
+          confirmButtonColor: "#6a11cb"
+        });
+      {% endfor %}
+    });
+  </script>
+{% endif %}
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
