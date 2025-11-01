@@ -1,25 +1,122 @@
 {% extends 'base.html' %}
-{% block title %}Resultados - VapeMarket{% endblock %}
+{% load static %}
+
+{% block title %}Catálogo - VapeMarket{% endblock %}
 
 {% block content %}
 <div class="container py-5">
-  <h3>Resultados de explorar productos</h3>
-  <div class="row mt-4">
-    {% if productos %}
-      {% for producto in productos %}
-        <div class="col-md-3 mb-4">
-          <div class="card h-100 shadow-sm">
-            <img src="{{ producto.imagen }}" class="card-img-top" alt="{{ producto.nombre }}">
-            <div class="card-body">
-              <h5 class="card-title">{{ producto.nombre }}</h5>
-              <p class="card-text text-muted">${{ producto.precio }}</p>
+  <div class="row">
+    <!--  Catálogo de Productos -->
+    <div class="col-lg-8">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold">Catálogo de Productos</h3>
+      </div>
+
+      <!-- Grid de productos -->
+      <div class="row g-4">
+        {% for producto in productos %}
+        <div class="col-md-4 col-sm-6">
+          <div class="card h-100 border-0 shadow-sm">
+            <img src="{{ producto.imagen }}" class="card-img-top" style="height:230px; object-fit:cover;" alt="{{ producto.nombre }}">
+            <div class="card-body text-center">
+              <h6 class="fw-semibold">{{ producto.nombre }}</h6>
+              <p class="text-muted mb-1">${{ producto.precio }}</p>
+              <button class="btn btn-vape mt-2 w-100 agregar-carrito" data-id="{{ producto.id }}">
+                <i class="bi bi-cart-plus"></i> Agregar al Carrito
+              </button>
             </div>
           </div>
         </div>
-      {% endfor %}
-    {% else %}
-      <p>No se encontraron productos.</p>
-    {% endif %}
+        {% empty %}
+        <p class="text-center text-muted mt-4">No hay productos disponibles.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Carrito lateral -->
+    <div class="col-lg-4 mt-4 mt-lg-0">
+      <div class="card shadow-sm p-3">
+        <h5 class="fw-bold mb-3"><i class="bi bi-cart"></i> Carrito</h5>
+
+        {% if carrito_items %}
+          <ul class="list-group mb-3" id="lista-carrito">
+            {% for item in carrito_items %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ item.producto.nombre }}
+                <span class="badge bg-primary rounded-pill">{{ item.cantidad }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+          <p class="fw-bold text-end">Total: $<span id="total-carrito">{{ total }}</span></p>
+          <a href="{% url 'productos:resumen_pedido' %}" class="btn btn-vape w-100 mt-2">
+            <i class="bi bi-receipt"></i> Ver Resumen del Pedido
+          </a>
+        {% else %}
+          <p class="text-muted" id="carrito-vacio">Tu carrito está vacío.</p>
+          <ul class="list-group mb-3 d-none" id="lista-carrito"></ul>
+          <p class="fw-bold text-end d-none">Total: $<span id="total-carrito">0</span></p>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </div>
+
+<!--  Script AJAX directo sin ventana flotante -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.agregar-carrito').forEach(boton => {
+    boton.addEventListener('click', function() {
+      const productoId = this.getAttribute('data-id');
+      const botonOriginal = this;
+      const iconoOriginal = botonOriginal.innerHTML;
+
+      fetch(`/agregar_ajax/${productoId}/`)
+        .then(response => {
+          if (!response.ok) {
+            if (response.status === 403) {
+              console.warn("El usuario no ha iniciado sesión.");
+            }
+            throw new Error("Error en la solicitud");
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Actualiza el total
+          const totalElemento = document.querySelector('#total-carrito');
+          if (totalElemento) {
+            totalElemento.textContent = data.total;
+          }
+
+          // Actualiza la lista del carrito
+          const listaCarrito = document.querySelector('#lista-carrito');
+          const carritoVacio = document.querySelector('#carrito-vacio');
+          if (carritoVacio) carritoVacio.classList.add('d-none');
+          listaCarrito.classList.remove('d-none');
+
+          let existente = [...listaCarrito.children].find(li => li.textContent.includes(data.nombre));
+          if (existente) {
+            existente.querySelector('span').textContent = data.cantidad;
+          } else {
+            const nuevo = document.createElement('li');
+            nuevo.className = "list-group-item d-flex justify-content-between align-items-center";
+            nuevo.innerHTML = `${data.nombre} <span class="badge bg-primary rounded-pill">${data.cantidad}</span>`;
+            listaCarrito.appendChild(nuevo);
+          }
+
+          // Confirmación visual (directa, sin ventana)
+          botonOriginal.innerHTML = "✅ Agregado";
+          botonOriginal.disabled = true;
+          botonOriginal.classList.add("btn-success");
+          setTimeout(() => {
+            botonOriginal.innerHTML = iconoOriginal;
+            botonOriginal.disabled = false;
+            botonOriginal.classList.remove("btn-success");
+          }, 1200);
+        })
+        .catch(error => console.error('Error:', error));
+    });
+  });
+});
+</script>
+
 {% endblock %}

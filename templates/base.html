@@ -17,8 +17,7 @@
 </head>
 <body>
 
-  <!-- NAVBAR SUPERIOR -->
- <!-- NAVBAR SUPERIOR -->
+<!-- NAVBAR SUPERIOR -->
 <nav class="navbar navbar-expand-lg py-3" style="background-color: #8b00ff;">
   <div class="container">
     <!-- LOGO -->
@@ -39,14 +38,9 @@
         </li>
 
         {% if user.is_authenticated %}
-          <!-- 🔹 Enlace al perfil -->
           <li class="nav-item">
-            <a class="nav-link text-white fw-semibold" href="{% url 'usuarios:perfil_usuario' %}">
-              Mi perfil
-            </a>
+            <a class="nav-link text-white fw-semibold" href="{% url 'usuarios:perfil_usuario' %}">Mi perfil</a>
           </li>
-
-          <!-- 🔹 Botón de cerrar sesión -->
           <li class="nav-item">
             <form action="{% url 'usuarios:logout' %}" method="post" style="display:inline;">
               {% csrf_token %}
@@ -55,7 +49,6 @@
               </button>
             </form>
           </li>
-
         {% else %}
           <li class="nav-item">
             <a class="nav-link text-white fw-semibold" href="{% url 'usuarios:login' %}">Iniciar sesión</a>
@@ -66,7 +59,8 @@
         {% endif %}
       </ul>
 
-      <!-- DERECHA -->
+      <!-- 🔍 Mostrar búsqueda y explorador SOLO en catálogo o búsqueda -->
+      {% if request.path == '/catalogo/' or request.path|slice:":8" == '/buscar' %}
       <div class="d-flex align-items-center">
         <!-- Campo de búsqueda -->
         <form action="{% url 'productos:buscar_productos' %}" method="get" class="d-flex me-3">
@@ -76,62 +70,53 @@
           </button>
         </form>
 
-        <!-- Menú desplegable Explorar -->
-        <div class="dropdown">
-          <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="explorarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-chevron-down"></i> Explorar productos
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="explorarDropdown">
-            <li><a class="dropdown-item" href="#">Vapers</a></li>
-            <li><a class="dropdown-item" href="#">Líquidos</a></li>
-            <li><a class="dropdown-item" href="#">Pods</a></li>
+        <!-- 🔽 Menú desplegable de productos -->
+        <li class="nav-item dropdown list-unstyled">
+          <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Explorar productos
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{% url 'productos:catalogo' %}?categoria=vapers">Vapers</a></li>
+            <li><a class="dropdown-item" href="{% url 'productos:catalogo' %}?categoria=liquidos">Líquidos</a></li>
+            <li><a class="dropdown-item" href="{% url 'productos:catalogo' %}?categoria=pods">Pods</a></li>
           </ul>
-        </div>
+        </li>
       </div>
+      {% endif %}
     </div>
   </div>
 </nav>
 
+<!-- CONTENIDO PRINCIPAL -->
+{% block content %}{% endblock %}
 
-  <!-- CONTENIDO PRINCIPAL -->
-  {% block content %}{% endblock %}
-
-  <!-- FOOTER -->
-  <footer class="text-center text-lg-start py-5" style="background-color: #f1f1f1; color: black;">
-    <div class="container text-md-start">
-      <div class="row text-md-start">
-
-        <!-- Columna 1 -->
-        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-          <h6 class="text-uppercase fw-bold mb-3">VapeMarket</h6>
-          <p>Tu mercado de vapeo líder para una experiencia vibrante y creativa.</p>
-        </div>
-
-        <!-- Columna 2 -->
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-          <h6 class="text-uppercase fw-bold mb-3">Soporte</h6>
-          <p><a href="#" class="text-black text-decoration-none">Contáctanos</a></p>
-          <p><a href="#" class="text-black text-decoration-none">Preguntas Frecuentes</a></p>
-          <p><a href="#" class="text-black text-decoration-none">Política de Envío</a></p>
-        </div>
-
-        <!-- Columna 3 -->
-        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-          <h6 class="text-uppercase fw-bold mb-3">Legal</h6>
-          <p><a href="#" class="text-black text-decoration-none">Términos de Servicio</a></p>
-          <p><a href="#" class="text-black text-decoration-none">Política de Privacidad</a></p>
-        </div>
-
+<!-- FOOTER -->
+<footer class="text-center text-lg-start py-5" style="background-color: #f1f1f1; color: black;">
+  <div class="container text-md-start">
+    <div class="row text-md-start">
+      <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+        <h6 class="text-uppercase fw-bold mb-3">VapeMarket</h6>
+        <p>Tu mercado de vapeo líder para una experiencia vibrante y creativa.</p>
+      </div>
+      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+        <h6 class="text-uppercase fw-bold mb-3">Soporte</h6>
+        <p><a href="#" class="text-black text-decoration-none">Contáctanos</a></p>
+        <p><a href="#" class="text-black text-decoration-none">Preguntas Frecuentes</a></p>
+        <p><a href="#" class="text-black text-decoration-none">Política de Envío</a></p>
+      </div>
+      <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+        <h6 class="text-uppercase fw-bold mb-3">Legal</h6>
+        <p><a href="#" class="text-black text-decoration-none">Términos de Servicio</a></p>
+        <p><a href="#" class="text-black text-decoration-none">Política de Privacidad</a></p>
       </div>
     </div>
+  </div>
+  <div class="text-center py-3 mt-3" style="background-color: #e0e0e0; color: black;">
+    © 2025 VapeMarket. Todos los derechos reservados.
+  </div>
+</footer>
 
-    <div class="text-center py-3 mt-3" style="background-color: #e0e0e0; color: black;">
-      © 2025 VapeMarket. Todos los derechos reservados.
-    </div>
-  </footer>
-
-  <!-- JS de Bootstrap -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+<!-- JS de Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

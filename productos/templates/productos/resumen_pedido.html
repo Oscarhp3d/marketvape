@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Resumen del Pedido - VapeMarket{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row">
+    <!--  LISTA DE PRODUCTOS -->
+    <div class="col-lg-8 mb-4">
+      <div class="card shadow-sm p-4 border-0">
+        <h3 class="fw-bold mb-4 text-center text-uppercase text-dark">
+          🛒 Resumen de tu Pedido
+        </h3>
+
+        {% if carrito_items %}
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead class="table-light">
+              <tr class="text-center">
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in carrito_items %}
+              <tr class="text-center align-middle">
+                <td class="text-start">
+                  <div class="d-flex align-items-center">
+                    <img src="{{ item.producto.imagen }}" alt="{{ item.producto.nombre }}"
+                         class="rounded me-3 shadow-sm"
+                         style="width: 70px; height: 70px; object-fit: cover;">
+                    <span class="fw-semibold text-dark">{{ item.producto.nombre }}</span>
+                  </div>
+                </td>
+                <td class="text-muted">${{ item.producto.precio }}</td>
+                <td>
+                  <div class="d-flex justify-content-center align-items-center">
+                    <a href="{% url 'productos:actualizar_carrito' item.id 'restar' %}"
+                       class="btn btn-sm btn-outline-secondary me-2">−</a>
+                    <span class="fw-bold">{{ item.cantidad }}</span>
+                    <a href="{% url 'productos:actualizar_carrito' item.id 'sumar' %}"
+                       class="btn btn-sm btn-outline-secondary ms-2">+</a>
+                  </div>
+                </td>
+                <td class="fw-semibold text-success">${{ item.subtotal }}</td>
+                <td>
+                  <a href="{% url 'productos:actualizar_carrito' item.id 'eliminar' %}"
+                     class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-center text-muted my-4">Tu carrito está vacío.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!--   (Resumen de Pago) -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0 p-4 bg-light">
+        <h5 class="fw-bold text-center mb-4 text-dark">
+          <i class="bi bi-cash-coin"></i> Resumen de Pago
+        </h5>
+
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Subtotal:</span>
+          <span class="fw-semibold">${{ subtotal }}</span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Costo de envío:</span>
+          <span class="fw-semibold text-primary">${{ envio }}</span>
+        </div>
+
+        <hr>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <span class="fw-bold fs-5 text-dark">Total:</span>
+          <span class="fw-bold fs-5 text-success">${{ total }}</span>
+        </div>
+
+        <!--  Botones -->
+        <div class="d-grid gap-3">
+          <a href="{% url 'productos:pago' %}" class="btn btn-success btn-lg">
+            <i class="bi bi-credit-card"></i> Continuar con el Pago
+          </a>
+          <a href="{% url 'productos:catalogo' %}" class="btn btn-outline-dark">
+            <i class="bi bi-arrow-left"></i> Volver al Catálogo
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
