@@ -2,6 +2,19 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .models import Producto, Carrito
+from django.shortcuts import render
+
+
+def pago_exitoso(request):
+    # Vaciar el carrito
+    Carrito.objects.filter(usuario=request.user).delete()
+
+    return render(request, 'productos/pago_exitoso.html')
+
+
+def pago_exitoso(request):
+    return render(request, 'productos/pago_exitoso.html')
+
 
 
 # 🏠 Página de inicio

@@ -1,177 +1,131 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Iniciar Sesión - VapeMarket</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+{% block content %}
+
 <style>
-  body {
-    background: radial-gradient(circle at top, #2c2c54, #1e1e30);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    overflow: hidden;
-  }
+/* Ocultar footer */
+footer { display: none !important; }
 
-  .login-box {
-    background: rgba(255,255,255,0.08);
-    padding: 2.5rem 3rem;
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgba(255,255,255,0.1);
-    text-align: center;
-    color: white;
-    width: 350px;
-  }
-
-  .login-box h2 {
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-  }
-
-  label {
-    display: block;
-    text-align: left;
-    font-size: 0.9rem;
-    color: #ddd;
-    margin-top: 10px;
-  }
-
-  input {
-    width: 100%;
-    margin: 8px 0 16px 0;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background: rgba(255,255,255,0.15);
-    color: white;
-    font-size: 1rem;
-  }
-
-  input::placeholder {
-    color: rgba(255,255,255,0.6);
-  }
-
-  button {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(90deg, #ff416c, #ff4b2b);
-    color: white;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* 🌀 Animación cigarrillo */
-  .cigarette {
-    position: relative;
-    width: 180px;
-    height: 20px;
-    background: linear-gradient(to right, #e0e0e0 0%, #dcdcdc 80%, #b3541e 100%);
-    border-radius: 10px;
-    margin: 1.5rem auto 0;
-    overflow: hidden;
-  }
-
-  .ash {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 0%;
-    height: 100%;
-    background: #444;
-    transition: width 3s linear;
-  }
-
-  .smoke {
-    position: absolute;
-    right: -10px;
-    top: -20px;
-    width: 10px;
-    height: 10px;
-    background: rgba(255,255,255,0.4);
-    border-radius: 50%;
-    opacity: 0;
-  }
-
-  @keyframes smokeUp {
-    0% { transform: translateY(0) scale(1); opacity: 0.5; }
-    50% { transform: translateY(-30px) scale(1.3); opacity: 0.3; }
-    100% { transform: translateY(-60px) scale(0.8); opacity: 0; }
-  }
-
-  /* 🌫️ Humo ambiental */
-  .background-smoke {
-    position: absolute;
+/* 🌌 Fondo morado degradado animado */
+.login-bg {
+    position: fixed;
     top: 0; left: 0;
     width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%);
-    filter: blur(50px);
-    animation: floatSmoke 10s infinite alternate ease-in-out;
-    z-index: 0;
-  }
+    height: 100vh;
+    background: linear-gradient(120deg, #25003a, #5200a8, #7a00ff);
+    background-size: 300% 300%;
+    animation: gradientFlow 10s ease infinite;
+    z-index: -3;
+}
 
-  @keyframes floatSmoke {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(30px, -30px); }
-  }
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
+/* 💨 Humo animado */
+.smoke {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 140%;
+    height: 140%;
+    background: url("https://i.imgur.com/1JgWb5F.png") no-repeat center;
+    background-size: cover;
+    opacity: 0.22;
+    filter: blur(10px);
+    animation: smokeAnimation 18s linear infinite;
+    pointer-events: none;
+    z-index: -2;
+}
+
+@keyframes smokeAnimation {
+    0% { transform: translate(-6%, -6%) scale(1.15); }
+    50% { transform: translate(6%, 6%) scale(1.18); }
+    100% { transform: translate(-6%, -6%) scale(1.15); }
+}
+
+/* 📦 Caja de login con glassmorphism */
+.login-box {
+    width: 380px;
+    margin: auto;
+    margin-top: 120px;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 35px;
+    border-radius: 15px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    color: white;
+    text-align: center;
+    position: relative;
+    z-index: 5;
+}
+
+.login-box h2 {
+    font-weight: 700;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.25);
+    color: white;
+    font-size: 15px;
+}
+
+.login-box input::placeholder {
+    color: #eee;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #ff4b2b, #ff416c);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.login-box button:hover {
+    transform: scale(1.05);
+}
+
+.login-box a {
+    color: #ffd6ff;
+    text-decoration: none;
+    font-weight: 500;
+}
 </style>
-</head>
-<body>
-  <div class="background-smoke"></div>
 
-  <div class="login-box" style="z-index: 1;">
-    <h2>Iniciar Sesión</h2>
-    <form method="post" id="loginForm">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" id="loginBtn">Iniciar sesión</button>
+<!-- 🔮 Capas de fondo -->
+<div class="login-bg"></div>
+<div class="smoke"></div>
+
+<!-- 🟣 Caja de Login -->
+<div class="login-box">
+    <h2 class="fw-bold mb-4">Iniciar Sesión</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="username" placeholder="Usuario" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+
+        <button type="submit">Ingresar</button>
+
+        <p class="mt-3">
+            ¿No tienes cuenta?
+            <a href="{% url 'usuarios:registro' %}">Regístrate</a>
+        </p>
     </form>
-  </div>
+</div>
 
-  <script>
-    const form = document.getElementById('loginForm');
-    const btn = document.getElementById('loginBtn');
-
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-
-      // Reemplaza el botón por el cigarrillo
-      btn.outerHTML = `
-        <div class="cigarette" id="cigarette">
-          <div class="ash" id="ash"></div>
-        </div>
-      `;
-
-      const cig = document.getElementById('cigarette');
-      const ash = document.getElementById('ash');
-
-      setTimeout(() => { ash.style.width = '100%'; }, 200);
-
-      const smokeInterval = setInterval(() => {
-        const smoke = document.createElement('div');
-        smoke.classList.add('smoke');
-        cig.appendChild(smoke);
-        smoke.style.right = (Math.random() * 30 - 10) + 'px';
-        smoke.style.animation = 'smokeUp 2s ease-out forwards';
-        setTimeout(() => smoke.remove(), 2000);
-      }, 300);
-
-      setTimeout(() => {
-        clearInterval(smokeInterval);
-        form.submit();
-      }, 3200);
-    });
-  </script>
-</body>
-</html>
+{% endblock %}
